@@ -63,6 +63,20 @@ class Cache:
         self._redis.set(key, data)
         return key
 
+    def replay(fn):
+        """
+        function that takes fn an arg
+        """
+        input_Key = f"{fn.__qualname__}:inputs"
+        output_key = f"{fn.__qualname__}:outputs"
+
+        input_history = [eval(args) for args in cache._redis.lrange(
+            inputs_key, 0, -1)]
+        output_history = cache._redis.lrange(output_key, 0, -1)
+        print(f"{fn.__qualname__} was called {len(input_history)} times:")
+        for args, output in zip(input_history, output_history):
+            print(f"{fn.__qualname__}{args} -> {output.decode('utf-8')}")
+
     def get(self, key: str, fn: Callable = None) -> Union[
             str, bytes, int, float, None]:
         """
