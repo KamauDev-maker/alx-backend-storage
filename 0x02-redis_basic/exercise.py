@@ -27,6 +27,7 @@ def call_history(method: Callable) -> Callable:
     """
     Method takes a decorator callable as an arg
     """
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
         Function that will replace the original method
