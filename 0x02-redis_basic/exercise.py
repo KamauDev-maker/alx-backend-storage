@@ -63,7 +63,7 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def replay(fn):
+    def replay(fn: Callable) -> None:
         """
         function that takes fn an arg
         """
